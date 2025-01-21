@@ -10,7 +10,7 @@ type Inputs = {
 
 
 const Page = ()=>{
-  const {handleSubmit, register} = useForm<Inputs>();
+  const {handleSubmit, register, formState: {errors}} = useForm<Inputs>();
 
   const handleFormSubmit: SubmitHandler<Inputs> = (data)=>{
     console.log(data)
@@ -23,6 +23,9 @@ const Page = ()=>{
           className="border border-black p-3"
           placeholder="Digite seu nome"
         />
+        {errors.name?.type === 'required' && <p>Campo obrigatório!</p>}
+        {errors.name?.type === 'minLength' && <p>Precisa ter no mínio 2 caracteres!</p>}
+        {errors.name?.type === 'maxLength' && <p>Deve ter no máximo 30 caracteres!</p>}
         <input 
           {...register('lastName')} 
           className="border border-black p-3 mt-4 block"
@@ -30,12 +33,13 @@ const Page = ()=>{
         />
         <input 
           type="number"
-          {...register('age', {required: true, min: 18, max:120})} 
-          className="border border-black p-3 mt-4"
+          {...register('age', {required: 'Campo obrigatório!', min: 18, max:120})} 
+          className="border border-black p-3 mt-4 block"
           placeholder="Digite sua idade"
         />
+        {errors.age && <p>{errors.age.message}</p>}
 
-        <input type="submit" value="Enviar" />
+        <input type="submit" value="Enviar" className="p-4" />
       </form>
     </div>
   )
