@@ -1,45 +1,43 @@
 "use client"
 
 import { SubmitHandler, useForm } from "react-hook-form";
-
-type Inputs = {
-  name: string;
-  lastName: string;
-  age: number;
-}
-
+import { SignUpForm } from "../types/SignUpForm"; //era o type Inputs
+import { Input } from "../components/Input";
 
 const Page = ()=>{
-  const {handleSubmit, register, formState: {errors}} = useForm<Inputs>();
+  //const {control, handleSubmit, register, formState: {errors}} = useForm<SignUpForm>();
+  const {control, handleSubmit } = useForm<SignUpForm>({
+    defaultValues:{
+      name:'',
+      lastName: '',
+      age: 0
+    }
+  });
 
-  const handleFormSubmit: SubmitHandler<Inputs> = (data)=>{
+  const handleFormSubmit: SubmitHandler<SignUpForm> = (data)=>{
     console.log(data)
   }
   return (
     <div className="container mx-auto">
       <form onSubmit={handleSubmit(handleFormSubmit)}>
-        <input 
-          {...register('name', {required: true, minLength: 2, maxLength: 30})} 
-          className="border border-black p-3"
-          placeholder="Digite seu nome"
-        />
-        {errors.name?.type === 'required' && <p>Campo obrigatório!</p>}
-        {errors.name?.type === 'minLength' && <p>Precisa ter no mínio 2 caracteres!</p>}
-        {errors.name?.type === 'maxLength' && <p>Deve ter no máximo 30 caracteres!</p>}
-        <input 
-          {...register('lastName')} 
-          className="border border-black p-3 mt-4 block"
-          placeholder="Digite seu sobrenome"
-        />
-        <input 
-          type="number"
-          {...register('age', {required: 'Campo obrigatório!', min: 18, max:120})} 
-          className="border border-black p-3 mt-4 block"
-          placeholder="Digite sua idade"
-        />
-        {errors.age && <p>{errors.age.message}</p>}
+        
 
-        <input type="submit" value="Enviar" className="p-4" />
+        <Input
+          control={control}
+          name="name"
+          rules={{required: true, minLength: 2, maxLength: 30}}
+         />
+        <Input
+          control={control}
+          name="lastName"
+         />
+        <Input
+          control={control}
+          name="age"
+          rules={{required: 'Campo obrigatório!', min: 18, max:120}}
+         />
+
+        <input type="submit" value="Enviar" className="p-4 bg-blue-500 text-white rounded hover:bg-blue-600 cursor-pointer" />
       </form>
     </div>
   )
