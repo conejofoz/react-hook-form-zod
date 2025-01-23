@@ -1,12 +1,11 @@
 "use client"
 
-import { SubmitHandler, useForm } from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { SignUpForm } from "../types/SignUpForm"; //era o type Inputs
-import { Input } from "../components/Input";
+import { Input } from "@mui/material";
 
 const Page = ()=>{
-  //const {control, handleSubmit, register, formState: {errors}} = useForm<SignUpForm>();
-  const {control, handleSubmit, setValue } = useForm<SignUpForm>({
+  const {control, handleSubmit } = useForm<SignUpForm>({
     defaultValues:{
       name:'',
       lastName: '',
@@ -21,26 +20,44 @@ const Page = ()=>{
     <div className="container mx-auto">
       <form onSubmit={handleSubmit(handleFormSubmit)}>
         
-
-        <Input
+        <Controller
           control={control}
           name="name"
-          rules={{required: true, minLength: 2, maxLength: 30}}
-         />
-        <Input
+          rules={{required: true}}
+          render={({ field, fieldState }) => 
+            <Input { ...field}
+              className="block mr-4"
+              error={fieldState.invalid}
+           />
+          }
+        />
+
+        <Controller
           control={control}
           name="lastName"
-         />
-        <Input
+          render={({ field, fieldState }) => 
+            <Input { ...field}
+              className="block mr-4"
+              error={fieldState.invalid}
+           />
+          }
+        />
+
+        <Controller
           control={control}
           name="age"
-          rules={{required: 'Campo obrigatório!', min: 18, max:120}}
-         />
+          rules={{required: true, min: 18}}
+          render={({ field, fieldState }) => 
+            <Input { ...field}
+              className="block mr-4"
+              error={fieldState.invalid}
+           />
+          }
+        />
+        {/* obs: esse Input agora é do Material UI */}
+        
 
         <input type="submit" value="Enviar" className="p-4 bg-blue-500 text-white rounded hover:bg-blue-600 cursor-pointer" />
-        <button onClick={()=>setValue('age', 18)} className="block mt-4 p-4 bg-blue-500 text-white rounded hover:bg-blue-600 cursor-pointer">
-          Definir como maior de idade
-        </button>
       </form>
     </div>
   )
