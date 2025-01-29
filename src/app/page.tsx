@@ -18,16 +18,15 @@ const Page = ()=>{
     age: z.number().min(18)
   });
 
-  /* testando o padrão */
-  console.log(
-    SignUpForm.parse(
-      {
-        name: 'Xivio',
-        LastName: 'Conejo',
-        age: 90
-      }
-    )
-  );
+  
+  /* Inferindo um tipo pelo zod */
+  type SigUpObject = z.infer<typeof SignUpForm>;
+
+  const obj: SigUpObject = {
+    name: "Xivio",
+    lastName: "conejo",
+    age: 90
+  }
 
   return (
     <div className="container mx-auto">
